@@ -3,6 +3,10 @@ name = "goofy"
 version = "0.1.0"
 authors = ["Yves Savoy <ysavoy@gmail.com>"]
 edition = "2018"
+description = "Rust bindings to the mobile instagram API"
+documentation = "https://docs.rs/goofy"
+license = "MIT"
+repository = "https://github.com/yvessavoy/goofy"
 
 [dependencies]
 reqwest = { version = "0.10", features = ["json", "cookies", "blocking"] }
