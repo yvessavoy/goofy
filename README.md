@@ -15,7 +15,7 @@ fn main() {
 ```
 
 ### Store a client to disk
-This is especially useful when you repeatetly start your program. Storing the client to disk avoids repeated login and thus lowers the chance of getting blocked by instagram.
+This is especially useful when you repeatedly start your program. Storing the client to disk avoids repeated login and thus lowers the chance of getting blocked by instagram.
 ```rust
 use goofy::Client;
 fn main() {
