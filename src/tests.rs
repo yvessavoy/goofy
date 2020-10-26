@@ -1,7 +1,7 @@
 use crate::Client;
 
 #[test]
-fn test_fetch_public_profile() {
+fn test_get_profile_by_username() {
     let client = if std::path::Path::new("session.txt").exists() {
         Client::import("session.txt").expect("Error importing client")
     } else {
