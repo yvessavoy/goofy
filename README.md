@@ -8,7 +8,7 @@ use goofy::Client;
 fn main() {
     let username = "foo";
     let password = "bar";
-    let client = Client::new(&foo, &bar).expect("Could not create client");
+    let client = Client::new(username, password).expect("Could not create client");
     let profile = client.get_profile_by_username("mozilla");
     assert_eq!(profile.username, "mozilla");
 }
@@ -21,7 +21,7 @@ use goofy::Client;
 fn main() {
     let username = "foo";
     let password = "bar";
-    let client = Client::new(&foo, &bar).expect("Could not create client");
+    let client = Client::new(username, password).expect("Could not create client");
     client.export("goofy-session.txt").expect("Could not persist client to disk");
 }
 ```
