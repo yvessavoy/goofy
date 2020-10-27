@@ -1,6 +1,7 @@
 use crate::device::{get_device, Device};
 use crate::GoofyError;
-use crate::Profile;
+use crate::API_BASE_URL;
+use crate::INSTAGRAM_SIGN_KEY;
 use hmac::{Hmac, Mac};
 use sha2::Sha256;
 use std::collections::HashMap;
@@ -10,11 +11,8 @@ use uuid::Uuid;
 
 type HmacSha256 = Hmac<Sha256>;
 
-const API_BASE_URL: &str = "https://i.instagram.com/api/v1";
-const INSTAGRAM_SIGN_KEY: &str = "99e16edcca71d7c1f3fd74d447f6281bd5253a623000a55ed0b60014467a53b1";
-
 pub struct Client {
-    http: reqwest::blocking::Client,
+    pub http: reqwest::blocking::Client,
     cookies: String,
 }
 
@@ -87,34 +85,6 @@ impl Client {
         file.write(self.cookies.as_bytes())?;
 
         Ok(())
-    }
-
-    pub fn get_profile_by_username(&self, username: &str) -> Result<Profile, GoofyError> {
-        let url = format!("{}/users/{}/usernameinfo/", API_BASE_URL, username);
-        let resp = self.http.get(&url).send()?;
-        if resp.status() != 200 {
-            return Err(GoofyError::ResponseNotSuccess(resp.status().as_u16()));
-        }
-
-        let resp_json = resp.json::<serde_json::Value>()?;
-        let user = resp_json["user"].clone();
-        let profile: Profile = serde_json::from_value(user)?;
-
-        Ok(profile)
-    }
-
-    pub fn get_profile_by_id(&self, id: i64) -> Result<Profile, GoofyError> {
-        let url = format!("{}/users/{}/info", API_BASE_URL, id);
-        let resp = self.http.get(&url).send()?;
-        if resp.status() != 200 {
-            return Err(GoofyError::ResponseNotSuccess(resp.status().as_u16()));
-        }
-
-        let resp_json = resp.json::<serde_json::Value>()?;
-        let user = resp_json["user"].clone();
-        let profile: Profile = serde_json::from_value(user)?;
-
-        Ok(profile)
     }
 }
 

@@ -3,12 +3,16 @@ use thiserror::Error;
 mod client;
 mod device;
 mod profile;
+mod users;
 
 pub use client::Client;
 pub use profile::Profile;
 
 #[cfg(test)]
 mod tests;
+
+const API_BASE_URL: &str = "https://i.instagram.com/api/v1";
+const INSTAGRAM_SIGN_KEY: &str = "99e16edcca71d7c1f3fd74d447f6281bd5253a623000a55ed0b60014467a53b1";
 
 #[derive(Error, Debug)]
 pub enum GoofyError {
