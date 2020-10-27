@@ -10,6 +10,8 @@ use uuid::Uuid;
 
 type HmacSha256 = Hmac<Sha256>;
 
+const API_BASE_URL: &str = "https://i.instagram.com/api/v1";
+
 pub struct Client {
     http: reqwest::blocking::Client,
     cookies: String,
@@ -39,10 +41,8 @@ impl Client {
             .default_headers(get_default_headers())
             .build()?;
 
-        let resp = client
-            .post("https://i.instagram.com/api/v1/accounts/login/")
-            .body(sig_data)
-            .send()?;
+        let login_url = format!("{}/accounts/login/", API_BASE_URL);
+        let resp = client.post(&login_url).body(sig_data).send()?;
 
         let mut cookies = HashMap::new();
         let mut cookie_string = String::new();
@@ -89,10 +89,7 @@ impl Client {
     }
 
     pub fn get_profile_by_username(&self, username: &str) -> Result<Profile, GoofyError> {
-        let url = format!(
-            "https://i.instagram.com/api/v1/users/{}/usernameinfo/",
-            username
-        );
+        let url = format!("{}/users/{}/usernameinfo/", API_BASE_URL, username);
         let resp = self.http.get(&url).send()?;
         if resp.status() != 200 {
             return Err(GoofyError::ResponseNotSuccess(resp.status().as_u16()));
@@ -106,7 +103,7 @@ impl Client {
     }
 
     pub fn get_profile_by_id(&self, id: i64) -> Result<Profile, GoofyError> {
-        let url = format!("https://i.instagram.com/api/v1/users/{}/info", id);
+        let url = format!("{}/users/{}/info", API_BASE_URL, id);
         let resp = self.http.get(&url).send()?;
         if resp.status() != 200 {
             return Err(GoofyError::ResponseNotSuccess(resp.status().as_u16()));
