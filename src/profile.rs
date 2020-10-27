@@ -2,6 +2,7 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Profile {
+    pub pk: u64,
     pub username: String,
     pub full_name: String,
     pub biography: String,

@@ -104,6 +104,20 @@ impl Client {
 
         Ok(profile)
     }
+
+    pub fn get_profile_by_id(&self, id: i64) -> Result<Profile, GoofyError> {
+        let url = format!("https://i.instagram.com/api/v1/users/{}/info", id);
+        let resp = self.http.get(&url).send()?;
+        if resp.status() != 200 {
+            return Err(GoofyError::ResponseNotSuccess(resp.status().as_u16()));
+        }
+
+        let resp_json = resp.json::<serde_json::Value>()?;
+        let user = resp_json["user"].clone();
+        let profile: Profile = serde_json::from_value(user)?;
+
+        Ok(profile)
+    }
 }
 
 fn get_default_headers() -> reqwest::header::HeaderMap {
