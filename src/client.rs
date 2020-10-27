@@ -11,6 +11,7 @@ use uuid::Uuid;
 type HmacSha256 = Hmac<Sha256>;
 
 const API_BASE_URL: &str = "https://i.instagram.com/api/v1";
+const INSTAGRAM_SIGN_KEY: &str = "99e16edcca71d7c1f3fd74d447f6281bd5253a623000a55ed0b60014467a53b1";
 
 pub struct Client {
     http: reqwest::blocking::Client,
@@ -163,8 +164,7 @@ fn hex_digest(val: &str) -> String {
 }
 
 fn generate_signature(data: &String) -> String {
-    let ig_sig_key = "99e16edcca71d7c1f3fd74d447f6281bd5253a623000a55ed0b60014467a53b1";
-    let mut mac = HmacSha256::new_varkey(ig_sig_key.as_bytes()).unwrap();
+    let mut mac = HmacSha256::new_varkey(INSTAGRAM_SIGN_KEY.as_bytes()).unwrap();
     mac.input(data.as_bytes());
     let body = format!("{:x}", mac.result().code());
     let url_body = format!("ig_sig_key_version=4&signed_body={}.{}", body, data);
