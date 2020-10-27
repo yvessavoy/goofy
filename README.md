@@ -5,6 +5,7 @@
 ### Get a profile by username
 ```rust
 use goofy::Client;
+
 fn main() {
     let username = "foo";
     let password = "bar";
@@ -14,10 +15,24 @@ fn main() {
 }
 ```
 
+### Get a profile by user id
+```rust
+use goofy::Client;
+
+fn main() {
+    let username = "foo";
+    let password = "bar";
+    let client = Client::new(username, password).expect("Could not create client");
+    let profile = client.get_profile_by_(7107542290);
+    assert_eq!(profile.username, "mozilla");
+}
+```
+
 ### Store a client to disk
 This is especially useful when you repeatedly start your program. Storing the client to disk avoids repeated login and thus lowers the chance of getting blocked by instagram.
 ```rust
 use goofy::Client;
+
 fn main() {
     let username = "foo";
     let password = "bar";
