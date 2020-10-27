@@ -21,7 +21,18 @@ impl Client {
         let phone_id = Uuid::new_v4();
         let guid = Uuid::new_v4();
         let device_id = generate_device_id(username);
-        let data = format!("{{\"phone_id\": \"{}\", \"device_id\": \"{}\", \"guid\": \"{}\", \"username\": \"{}\", \"password\": \"{}\"}}", phone_id, device_id, guid, username, password);
+        let data = format!(
+            r#"
+            {{
+                "phone_id": "{}",
+                "device_id": "{}",
+                "guid": "{}",
+                "username": "{}",
+                "password": "{}"
+            }}
+        "#,
+            phone_id, device_id, guid, username, password
+        );
         let sig_data = generate_signature(&data);
         let client = reqwest::blocking::Client::builder()
             .cookie_store(true)
