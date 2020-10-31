@@ -2,6 +2,7 @@ use thiserror::Error;
 
 mod client;
 mod device;
+mod friendships;
 mod profile;
 mod users;
 
