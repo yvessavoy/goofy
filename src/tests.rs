@@ -44,6 +44,10 @@ fn get_client() -> Client {
     } else {
         let username = std::env::var("GOOFY_USER").expect("GOOFY_USER not set");
         let password = std::env::var("GOOFY_PASS").expect("GOOFY_PASS not set");
-        Client::new(&username, &password).expect("Could not create client")
+        let client = Client::new(&username, &password).expect("Could not create client");
+        client
+            .export("session.txt")
+            .expect("Failed to store session to disk");
+        client
     }
 }
