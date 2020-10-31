@@ -40,7 +40,7 @@ impl Client {
     // Get users that a specific profile follows
     pub fn get_following(&self, user_id: u64) -> Result<Vec<Profile>, GoofyError> {
         let base_url = format!("{}/friendships/{}/following", API_BASE_URL, user_id);
-        let mut max_id = String::new();
+        let mut max_id: i32 = 0;
         let mut profiles: Vec<Profile> = Vec::new();
 
         loop {
@@ -49,7 +49,7 @@ impl Client {
             profiles.append(&mut response.users);
 
             match response.next_max_id {
-                Some(id) => max_id = id.to_string(),
+                Some(id) => max_id = id,
                 None => break,
             };
         }

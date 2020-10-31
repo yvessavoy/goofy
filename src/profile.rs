@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-#[derive(Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Profile {
     pub pk: u64,
     pub username: String,
