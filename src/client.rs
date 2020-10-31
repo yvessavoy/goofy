@@ -82,7 +82,7 @@ impl Client {
     // Store the current session to disk for later usage
     pub fn export(&self, path: &str) -> Result<(), GoofyError> {
         let mut file = File::create(path)?;
-        file.write(self.cookies.as_bytes())?;
+        file.write_all(self.cookies.as_bytes())?;
 
         Ok(())
     }
@@ -133,7 +133,7 @@ fn hex_digest(val: &str) -> String {
     format!("{:x}", md5::compute(v.as_bytes()))
 }
 
-fn generate_signature(data: &String) -> String {
+fn generate_signature(data: &str) -> String {
     let mut mac = HmacSha256::new_varkey(INSTAGRAM_SIGN_KEY.as_bytes()).unwrap();
     mac.input(data.as_bytes());
     let body = format!("{:x}", mac.result().code());
