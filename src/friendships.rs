@@ -7,12 +7,14 @@ use serde::Deserialize;
 #[derive(Deserialize)]
 struct FollowingResponse {
     next_max_id: Option<i32>,
+    #[serde(default)]
     users: Vec<Profile>,
 }
 
 #[derive(Deserialize)]
 struct FollowerResponse {
     next_max_id: Option<String>,
+    #[serde(default)]
     users: Vec<Profile>,
 }
 
