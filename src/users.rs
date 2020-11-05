@@ -1,7 +1,6 @@
 use crate::Client;
 use crate::GoofyError;
 use crate::Profile;
-use crate::API_BASE_URL;
 use serde::Deserialize;
 
 #[derive(Deserialize)]
@@ -11,7 +10,7 @@ struct UsersResponse {
 
 impl Client {
     pub fn get_profile_by_username(&self, username: &str) -> Result<Profile, GoofyError> {
-        let url = format!("{}/users/{}/usernameinfo/", API_BASE_URL, username);
+        let url = format!("{}/users/{}/usernameinfo/", self.base_url, username);
         let r = self.http.get(&url).send()?;
         if r.status() != 200 {
             return Err(GoofyError::ResponseNotSuccess(r.status().as_u16()));
@@ -23,7 +22,7 @@ impl Client {
     }
 
     pub fn get_profile_by_id(&self, id: i64) -> Result<Profile, GoofyError> {
-        let url = format!("{}/users/{}/info", API_BASE_URL, id);
+        let url = format!("{}/users/{}/info", self.base_url, id);
         let resp = self.http.get(&url).send()?;
         if resp.status() != 200 {
             return Err(GoofyError::ResponseNotSuccess(resp.status().as_u16()));

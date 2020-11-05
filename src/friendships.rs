@@ -1,7 +1,6 @@
 use crate::Client;
 use crate::GoofyError;
 use crate::Profile;
-use crate::API_BASE_URL;
 use serde::Deserialize;
 
 #[derive(Deserialize)]
@@ -21,7 +20,7 @@ struct FollowerResponse {
 impl Client {
     // Get users that follow a specific profile
     pub fn get_followers(&self, user_id: u64) -> Result<Vec<Profile>, GoofyError> {
-        let base_url = format!("{}/friendships/{}/followers/", API_BASE_URL, user_id);
+        let base_url = format!("{}/friendships/{}/followers/", self.base_url, user_id);
         let mut max_id = String::new();
         let mut profiles: Vec<Profile> = Vec::new();
 
@@ -46,7 +45,7 @@ impl Client {
 
     // Get users that a specific profile follows
     pub fn get_following(&self, user_id: u64) -> Result<Vec<Profile>, GoofyError> {
-        let base_url = format!("{}/friendships/{}/following", API_BASE_URL, user_id);
+        let base_url = format!("{}/friendships/{}/following", self.base_url, user_id);
         let mut max_id: i32 = 0;
         let mut profiles: Vec<Profile> = Vec::new();
 
@@ -57,7 +56,7 @@ impl Client {
                 return Err(GoofyError::ResponseNotSuccess(r.status().as_u16()));
             }
 
-            let mut response: FollowerResponse = r.json()?;
+            let mut response: FollowingResponse = r.json()?;
             profiles.append(&mut response.users);
 
             match response.next_max_id {

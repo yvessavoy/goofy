@@ -1,6 +1,6 @@
 use crate::device::{get_device, Device};
+use crate::get_base_url;
 use crate::GoofyError;
-use crate::API_BASE_URL;
 use crate::INSTAGRAM_SIGN_KEY;
 use hmac::{Hmac, Mac};
 use sha2::Sha256;
@@ -13,6 +13,7 @@ type HmacSha256 = Hmac<Sha256>;
 
 pub struct Client {
     pub http: reqwest::blocking::Client,
+    pub base_url: String,
     cookies: String,
 }
 
@@ -35,12 +36,13 @@ impl Client {
             phone_id, device_id, guid, username, password
         );
         let sig_data = generate_signature(&data);
+        let base_url = get_base_url();
         let client = reqwest::blocking::Client::builder()
             .cookie_store(true)
             .default_headers(get_default_headers())
             .build()?;
 
-        let login_url = format!("{}/accounts/login/", API_BASE_URL);
+        let login_url = format!("{}/accounts/login/", base_url);
         let resp = client.post(&login_url).body(sig_data).send()?;
 
         let mut cookies = HashMap::new();
@@ -54,6 +56,7 @@ impl Client {
             Ok(Client {
                 http: client,
                 cookies: cookie_string,
+                base_url,
             })
         } else {
             Err(GoofyError::LoginFailed(resp.status().as_u16()))
@@ -74,6 +77,7 @@ impl Client {
                 .default_headers(headers)
                 .build()?,
             cookies: cookie_string,
+            base_url: get_base_url(),
         };
 
         Ok(client)
