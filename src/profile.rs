@@ -8,6 +8,8 @@ pub struct Profile {
     pub full_name: String,
     #[serde(default)]
     pub biography: String,
+    #[serde(default)]
     pub is_private: bool,
+    #[serde(default)]
     pub is_verified: bool,
 }
