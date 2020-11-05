@@ -27,12 +27,7 @@ impl Client {
 
         loop {
             let url = format!("{}?max_id={}&ig_sig_key_version=4", base_url, max_id);
-            let r = self.http.get(&url).send()?;
-            if r.status() != 200 {
-                return Err(GoofyError::ResponseNotSuccess(r.status().as_u16()));
-            }
-
-            let mut response: FollowerResponse = r.json()?;
+            let mut response: FollowerResponse = self.http.get(&url).send()?.json()?;
             profiles.append(&mut response.users);
 
             match response.next_max_id {
@@ -52,12 +47,7 @@ impl Client {
 
         loop {
             let url = format!("{}?max_id={}&ig_sig_key_version=4", base_url, max_id);
-            let r = self.http.get(&url).send()?;
-            if r.status() != 200 {
-                return Err(GoofyError::ResponseNotSuccess(r.status().as_u16()));
-            }
-
-            let mut response: FollowingResponse = r.json()?;
+            let mut response: FollowingResponse = self.http.get(&url).send()?.json()?;
             profiles.append(&mut response.users);
 
             match response.next_max_id {
