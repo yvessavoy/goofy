@@ -22,7 +22,7 @@ impl Client {
     }
 
     pub fn get_profile_by_id(&self, id: i64) -> Result<Profile, GoofyError> {
-        let url = format!("{}/users/{}/info", self.base_url, id);
+        let url = format!("{}/users/{}/info/", self.base_url, id);
         let resp = self.http.get(&url).send()?;
         if resp.status() != 200 {
             return Err(GoofyError::ResponseNotSuccess(resp.status().as_u16()));
