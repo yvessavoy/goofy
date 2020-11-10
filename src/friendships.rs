@@ -45,7 +45,7 @@ impl Client {
 
     // Get users that a specific profile follows
     pub fn get_following(&self, user_id: u64) -> Result<Vec<Profile>, GoofyError> {
-        let base_url = format!("{}/friendships/{}/following", self.base_url, user_id);
+        let base_url = format!("{}/friendships/{}/following/", self.base_url, user_id);
         let mut max_id: i32 = 0;
         let mut profiles: Vec<Profile> = Vec::new();
 
