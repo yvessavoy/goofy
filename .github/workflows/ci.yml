@@ -30,11 +30,7 @@ jobs:
       run: cargo test
   
     - name: Clippy
-      run: |
-        rustup component add clippy
-        cargo clippy --all-targets --all-features -- -D warnings
+      run: cargo clippy --all-targets --all-features -- -D warnings
         
     - name: Formatting
-      run: |
-        rustup component add rustfmt
-        cargo fmt --check # with --check, rustfmt exits with code 1 if formatting changes are found
+      run: cargo fmt -- --check # with --check, rustfmt exits with code 1 if formatting changes are found
