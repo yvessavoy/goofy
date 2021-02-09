@@ -28,9 +28,6 @@ jobs:
 
     - name: Test
       run: cargo test
-      env:
-        GOOFY_USER: foo
-        GOOFY_PASS: bar
   
     - name: Clippy
       run: |

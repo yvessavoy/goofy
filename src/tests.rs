@@ -1,7 +1,6 @@
 use crate::Client;
 use mockito::mock;
 use mockito::Mock;
-use std::path::Path;
 
 #[test]
 fn get_profile_by_username() {
@@ -11,9 +10,10 @@ fn get_profile_by_username() {
         200,
     );
 
-    let client = get_client();
+    let test_client = TestClient::new();
 
-    let profile = client
+    let profile = test_client
+        .client
         .get_profile_by_username("jakebaecher")
         .expect("Error fetching profile");
     assert_eq!(profile.username, "jakebaecher");
@@ -23,9 +23,10 @@ fn get_profile_by_username() {
 fn get_profile_by_id() {
     let _mock = create_mock("/users/44487504243/info/", "user_id_success.json", 200);
 
-    let client = get_client();
+    let test_client = TestClient::new();
 
-    let profile = client
+    let profile = test_client
+        .client
         .get_profile_by_id(44487504243)
         .expect("Error fetching profile");
     assert_eq!(profile.username, "jakebaecher");
@@ -38,8 +39,11 @@ fn get_followers() {
         "get_followers.json",
         200,
     );
-    let client = get_client();
-    let followers = client
+
+    let test_client = TestClient::new();
+
+    let followers = test_client
+        .client
         .get_followers(44487504243)
         .expect("Failed to fetch followers");
     assert!(followers.len() == 11);
@@ -52,8 +56,11 @@ fn get_following() {
         "get_following.json",
         200,
     );
-    let client = get_client();
-    let following = client
+
+    let test_client = TestClient::new();
+
+    let following = test_client
+        .client
         .get_following(44487504243)
         .expect("Failed to fetch following");
     assert!(following.len() == 78);
@@ -68,16 +75,18 @@ fn create_mock(url: &str, response_path: &str, status: usize) -> Mock {
         .create()
 }
 
-fn get_client() -> Client {
-    if Path::new("session.txt").exists() {
-        Client::import("session.txt").expect("Error importing client")
-    } else {
-        let username = std::env::var("GOOFY_USER").expect("GOOFY_USER not set");
-        let password = std::env::var("GOOFY_PASS").expect("GOOFY_PASS not set");
-        let client = Client::new(&username, &password).expect("Could not create client");
-        client
-            .export("session.txt")
-            .expect("Failed to store session to disk");
-        client
+struct TestClient {
+    client: Client,
+    _mocks: Vec<Mock>,
+}
+
+impl TestClient {
+    fn new() -> Self {
+        let _mocks = vec![mock("POST", "/accounts/login/").with_status(200).create()];
+
+        Self {
+            client: Client::new("test", "test").expect("Error creating client"),
+            _mocks,
+        }
     }
 }
