@@ -7,9 +7,7 @@
 use goofy::Client;
 
 fn main() {
-    let username = "foo";
-    let password = "bar";
-    let client = Client::new(username, password).expect("Could not create client");
+    let client = Client::new("foo", "bar").expect("Could not create client");
     let profile = client.get_profile_by_username("mozilla");
     assert_eq!(profile.username, "mozilla");
 }
@@ -20,11 +18,20 @@ fn main() {
 use goofy::Client;
 
 fn main() {
-    let username = "foo";
-    let password = "bar";
-    let client = Client::new(username, password).expect("Could not create client");
-    let profile = client.get_profile_by_(7107542290);
+    let client = Client::new("foo", "bar").expect("Could not create client");
+    let profile = client.get_profile_by_id(7107542290);
     assert_eq!(profile.username, "mozilla");
+}
+```
+
+### Get followers for a specific profile
+```rust
+use goofy::Client;
+
+fn main() {
+    let client = Client::new("foo", "bar").expect("Could not create client");
+    let followers = client.get_followers(7107542290);
+    assert!(followers.len() > 0);
 }
 ```
 
@@ -34,9 +41,7 @@ This is especially useful when you repeatedly start your program. Storing the cl
 use goofy::Client;
 
 fn main() {
-    let username = "foo";
-    let password = "bar";
-    let client = Client::new(username, password).expect("Could not create client");
+    let client = Client::new("foo", "bar").expect("Could not create client");
     client.export("goofy-session.txt").expect("Could not persist client to disk");
 }
 ```
