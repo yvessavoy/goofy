@@ -2,7 +2,7 @@ use crate::device::{get_device, Device};
 use crate::get_base_url;
 use crate::GoofyError;
 use crate::INSTAGRAM_SIGN_KEY;
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, Mac, NewMac};
 use sha2::Sha256;
 use std::collections::HashMap;
 use std::fs::File;
@@ -138,9 +138,9 @@ fn hex_digest(val: &str) -> String {
 }
 
 fn generate_signature(data: &str) -> String {
-    let mut mac = HmacSha256::new_varkey(INSTAGRAM_SIGN_KEY.as_bytes()).unwrap();
-    mac.input(data.as_bytes());
-    let body = format!("{:x}", mac.result().code());
+    let mut mac = HmacSha256::new_from_slice(INSTAGRAM_SIGN_KEY.as_bytes()).unwrap();
+    mac.update(data.as_bytes());
+    let body = format!("{:x}", mac.finalize().into_bytes());
     let url_body = format!("ig_sig_key_version=4&signed_body={}.{}", body, data);
     url_body
 }
