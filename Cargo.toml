@@ -14,7 +14,7 @@ reqwest = { version = "0.11", features = ["json", "cookies", "blocking"] }
 serde = { version = "1.0.105", features = ["derive"] }
 uuid = { version = "0.8", features = ["serde", "v4"] }
 md5 = "0.7.0"
-sha2 = "0.9.3"
+sha2 = "0.10.2"
 digest = "0.10"
 hmac = "0.11"
 thiserror = "1.0"
