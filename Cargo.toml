@@ -12,7 +12,7 @@ keywords = ["instagram", "api"]
 [dependencies]
 reqwest = { version = "0.11", features = ["json", "cookies", "blocking"] }
 serde = { version = "1.0.105", features = ["derive"] }
-uuid = { version = "0.8", features = ["serde", "v4"] }
+uuid = { version = "1.2", features = ["serde", "v4"] }
 md5 = "0.7.0"
 sha2 = "0.9.3"
 digest = "0.10"
